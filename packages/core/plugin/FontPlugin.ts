@@ -53,22 +53,60 @@ class FontPlugin implements IPluginTempl {
       return Promise.resolve(this.cacheList);
     }
     if (this.tempPromise) return this.tempPromise;
-    this.tempPromise = axios
-      .get(`${this.repoSrc}/api/fonts?populate=*&pagination[pageSize]=100`)
-      .then((res) => {
-        const list = res.data.data.map((item: any) => {
-          return {
-            name: item.attributes.name,
-            type: item.attributes.type,
-            file: this.repoSrc + item.attributes.file.data.attributes.url,
-            img: this.repoSrc + item.attributes.img.data.attributes.url,
-          };
-        });
-        this.cacheList = list;
-        this.createFontCSS(list);
-        return list;
-      });
-    return this.tempPromise;
+
+    //下面的通过web获取注释掉，改为从本地读取
+    return Promise.resolve(this.loadFromLocal());
+
+    // this.tempPromise = axios
+    //   .get(`${this.repoSrc}/api/fonts?populate=*&pagination[pageSize]=100`)
+    //   .then((res) => {
+    //     const list = res.data.data.map((item: any) => {
+    //       return {
+    //         name: item.attributes.name,
+    //         type: item.attributes.type,
+    //         file: this.repoSrc + item.attributes.file.data.attributes.url,
+    //         img: this.repoSrc + item.attributes.img.data.attributes.url,
+    //       };
+    //     });
+    //     this.cacheList = list;
+    //     this.createFontCSS(list);
+    //     return list;
+    //   }).catch(err=>{
+    //     // 改为读取本地
+    //     return this.loadFromLocal();
+    //   });
+    // return this.tempPromise;
+  }
+
+  loadFromLocal() {
+    const list = [
+      {
+        name: '宋体',
+        type: 'cn',
+        file: '/src/assets/fonts/cn/STSONG.TTF',
+        img: '',
+      },
+      {
+        name: 'TIME NEW ROMAN',
+        type: 'en',
+        file: '/src/assets/fonts/en/TIMES.TTF',
+        img: '',
+      },
+      {
+        name: '汉体',
+        type: 'cn',
+        file: '/src/assets/fonts/cn/Black.ttf',
+        img: '',
+      },
+      {
+        name: '华康金刚黑',
+        type: 'cn',
+        file: '/src/assets/fonts/cn/HuaKangGoldenBlack.ttf',
+        img: '',
+      },
+    ];
+    this.cacheList = list;
+    return list;
   }
 
   downFontByJSON(str: string) {
@@ -125,8 +163,8 @@ class FontPlugin implements IPluginTempl {
         code +
         `
     @font-face {
-      font-family: ${item.name};
-      src: url('${item.file}');
+      font-family: '${item.name}';
+      // src: url('${item.file}');
     }
     `;
     });

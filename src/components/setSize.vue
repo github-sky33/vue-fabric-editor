@@ -40,7 +40,7 @@ const { mixinState, canvasEditor } = useSelect();
 
 const DefaultSize = {
   width: 900,
-  height: 1200,
+  height: 1020,
 };
 
 const modalSizeRef = ref(null);

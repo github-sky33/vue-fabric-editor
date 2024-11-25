@@ -15,8 +15,33 @@ const cnList = [
     name: '华康金刚黑',
     fontFamily: '华康金刚黑',
   },
+  {
+    name: '宋体',
+    fontFamily: '宋体',
+  },
+  {
+    name: 'TIME NEW ROMAN',
+    fontFamily: 'TIME NEW ROMAN',
+  },
 ];
 
-const enList = [];
+const enList = [
+  {
+    name: '汉体',
+    fontFamily: '汉体',
+  },
+  {
+    name: '华康金刚黑',
+    fontFamily: '华康金刚黑',
+  },
+  {
+    name: '宋体',
+    fontFamily: '宋体',
+  },
+  {
+    name: 'TIME NEW ROMAN',
+    fontFamily: 'TIME NEW ROMAN',
+  },
+];
 
 export default [...cnList, ...enList];

@@ -8,9 +8,9 @@
 
 <template>
   <div class="logo">
-    <a :href="webInfo.url" target="_blank">
+    <!-- <a :href="webInfo.url" target="_blank">
       <img :src="webInfo.img" alt="webInfo.name" />
-    </a>
+    </a> -->
   </div>
 </template>
 
@@ -26,10 +26,10 @@ const webInfo = ref({
 });
 
 const getWebInfoFun = async () => {
-  const res = await getWebInfo();
-  const info = pick(res.data.data.attributes, ['name', 'url']);
-  info.img = baseURL + get(res.data, 'data.attributes.logo.data.attributes.url');
-  webInfo.value = info;
+  // const res = await getWebInfo();
+  // const info = pick(res.data.data.attributes, ['name', 'url']);
+  // info.img = baseURL + get(res.data, 'data.attributes.logo.data.attributes.url');
+  // webInfo.value = info;
 };
 
 getWebInfoFun();

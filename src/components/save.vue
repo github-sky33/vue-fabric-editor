@@ -20,7 +20,7 @@
       </Button>
       <template #list>
         <DropdownMenu>
-          <DropdownItem name="saveMyClould">{{ $t('save.save_my_spase') }}</DropdownItem>
+          <!-- <DropdownItem name="saveMyClould">{{ $t('save.save_my_spase') }}</DropdownItem> -->
           <DropdownItem name="saveImg" divided>{{ $t('save.save_as_picture') }}</DropdownItem>
           <DropdownItem name="saveSvg">{{ $t('save.save_as_svg') }}</DropdownItem>
           <DropdownItem name="clipboard" divided>{{ $t('save.copy_to_clipboard') }}</DropdownItem>

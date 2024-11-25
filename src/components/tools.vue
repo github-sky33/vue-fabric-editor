@@ -2,7 +2,7 @@
   <div>
     <Divider plain orientation="left">{{ $t('common_elements') }}</Divider>
     <div class="tool-box">
-      <span @click="() => addText()" :draggable="true" @dragend="addText">
+      <span @click="() => addText()" :draggable="true" @dragend="addText" title="文本">
         <svg
           t="1650875455324"
           class="icon"
@@ -19,7 +19,7 @@
           ></path>
         </svg>
       </span>
-      <span @click="() => addTextBox()" :draggable="true" @dragend="addTextBox">
+      <span @click="() => addTextBox()" :draggable="true" @dragend="addTextBox" title="文本框">
         <svg
           t="1650854954008"
           class="icon"
@@ -36,7 +36,7 @@
           ></path>
         </svg>
       </span>
-      <span @click="() => addRect()" :draggable="true" @dragend="addRect">
+      <span @click="() => addRect()" :draggable="true" @dragend="addRect" title="矩形">
         <svg
           t="1650855811131"
           class="icon"
@@ -53,7 +53,7 @@
           ></path>
         </svg>
       </span>
-      <span @click="() => addCircle()" :draggable="true" @dragend="addCircle">
+      <span @click="() => addCircle()" :draggable="true" @dragend="addCircle" title="圆形">
         <svg
           t="1650855860236"
           class="icon"
@@ -70,7 +70,7 @@
           ></path>
         </svg>
       </span>
-      <span @click="() => addTriangle()" :draggable="true" @dragend="addTriangle">
+      <span @click="() => addTriangle()" :draggable="true" @dragend="addTriangle" title="三角形">
         <svg
           t="1650874633978"
           class="icon"
@@ -88,7 +88,7 @@
         </svg>
       </span>
       <!-- 多边形按钮 -->
-      <span @click="() => addPolygon()" :draggable="true" @dragend="addPolygon">
+      <span @click="() => addPolygon()" :draggable="true" @dragend="addPolygon" title="五边形">
         <svg
           t="1650874633978"
           class="icon"
@@ -111,6 +111,7 @@
       <span
         @click="drawingLineModeSwitch('line')"
         :class="state.isDrawingLineMode && state.lineType === 'line' && 'bg'"
+        title="直线"
       >
         <svg
           t="1673022047861"
@@ -137,6 +138,7 @@
       <span
         @click="drawingLineModeSwitch('arrow')"
         :class="state.isDrawingLineMode && state.lineType === 'arrow' && 'bg'"
+        title="箭头"
       >
         <!-- <svg t="1673022047861" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4206" width="20" height="20"><path d="M187.733333 1024h-170.666666c-10.24 0-17.066667-6.826667-17.066667-17.066667v-170.666666c0-10.24 6.826667-17.066667 17.066667-17.066667h170.666666c10.24 0 17.066667 6.826667 17.066667 17.066667v170.666666c0 10.24-6.826667 17.066667-17.066667 17.066667zM34.133333 989.866667h136.533334v-136.533334H34.133333v136.533334zM1006.933333 204.8h-170.666666c-10.24 0-17.066667-6.826667-17.066667-17.066667v-170.666666c0-10.24 6.826667-17.066667 17.066667-17.066667h170.666666c10.24 0 17.066667 6.826667 17.066667 17.066667v170.666666c0 10.24-6.826667 17.066667-17.066667 17.066667zM853.333333 170.666667h136.533334V34.133333h-136.533334v136.533334z" fill="" p-id="4207"></path><path d="M187.733333 853.333333c-3.413333 0-10.24 0-13.653333-3.413333-6.826667-6.826667-6.826667-17.066667 0-23.893333l648.533333-648.533334c6.826667-6.826667 17.066667-6.826667 23.893334 0s6.826667 17.066667 0 23.893334l-648.533334 648.533333c0 3.413333-6.826667 3.413333-10.24 3.413333z" fill="" p-id="4208"></path></svg> -->
         <svg
@@ -159,6 +161,7 @@
       <span
         @click="drawingLineModeSwitch('thinTailArrow')"
         :class="state.isDrawingLineMode && state.lineType === 'thinTailArrow' && 'bg'"
+        title="粗箭头"
       >
         <svg
           t="1715323097309"
@@ -180,6 +183,7 @@
       <span
         @click="drawPolygon"
         :class="state.isDrawingLineMode && state.lineType === 'polygon' && 'bg'"
+        title="多边形"
       >
         <svg
           t="1650874633978"
@@ -207,11 +211,12 @@
       <span
         @click="freeDraw"
         :class="state.isDrawingLineMode && state.lineType === 'freeDraw' && 'bg'"
+        title="画笔"
       >
         <Icon type="md-brush" :size="22" />
       </span>
     </div>
-    <Divider plain orientation="left">{{ $t('code_img') }}</Divider>
+    <!-- <Divider plain orientation="left">{{ $t('code_img') }}</Divider>
     <div class="tool-box">
       <span @click="canvasEditor.addQrCode">
         <svg
@@ -261,7 +266,7 @@
           ></path>
         </svg>
       </span>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -279,7 +284,7 @@ const LINE_TYPE = {
   pathText: 'pathText',
 };
 // 默认属性
-const defaultPosition = { shadow: '', fontFamily: 'arial' };
+const defaultPosition = { shadow: '', fontFamily: '宋体' };
 
 const { t } = useI18n();
 const { fabric, canvasEditor } = useSelect();
@@ -292,8 +297,8 @@ const addText = (event) => {
   cancelDraw();
   const text = new fabric.IText(t('everything_is_fine'), {
     ...defaultPosition,
-    fontSize: 80,
-    fill: '#000000FF',
+    fontSize: 50,
+    fill: '#FF0000FF',
   });
 
   canvasEditor.addBaseType(text, { center: true, event });
@@ -305,7 +310,7 @@ const addTextBox = (event) => {
     ...defaultPosition,
     splitByGrapheme: true,
     width: 400,
-    fontSize: 80,
+    fontSize: 50,
     fill: '#000000FF',
   });
 
@@ -387,19 +392,19 @@ const drawPolygon = () => {
   }
 };
 
-const drawPathText = () => {
-  if (state.lineType === LINE_TYPE.pathText) {
-    state.lineType = false;
-    state.isDrawingLineMode = false;
-    canvasEditor.endTextPathDraw();
-  } else {
-    endConflictTools();
-    endDrawingLineMode();
-    state.lineType = LINE_TYPE.pathText;
-    state.isDrawingLineMode = true;
-    canvasEditor.startTextPathDraw();
-  }
-};
+// const drawPathText = () => {
+//   if (state.lineType === LINE_TYPE.pathText) {
+//     state.lineType = false;
+//     state.isDrawingLineMode = false;
+//     canvasEditor.endTextPathDraw();
+//   } else {
+//     endConflictTools();
+//     endDrawingLineMode();
+//     state.lineType = LINE_TYPE.pathText;
+//     state.isDrawingLineMode = true;
+//     canvasEditor.startTextPathDraw();
+//   }
+// };
 
 const freeDraw = () => {
   if (state.lineType === LINE_TYPE.freeDraw) {

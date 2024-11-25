@@ -151,18 +151,35 @@ class MaterialPlugin implements IPluginTempl {
   }
 
   getSizeList() {
-    return axios.get(`${this.repoSrc}/api/sizes?pagination[pageSize]=100`).then((res) => {
-      const list = res.data.data.map((item: any) => {
-        return {
-          value: item.id,
-          name: item.attributes.name,
-          width: Number(item.attributes.width),
-          height: Number(item.attributes.height),
-          unit: item.attributes.unit,
-        };
-      });
-      return list;
-    });
+    return Promise.resolve([
+      {
+        value: 'plmdefaultsize',
+        name: '工艺编辑器默认尺寸',
+        width: 900,
+        height: 1020,
+        unit: 'px',
+      },
+    ]);
+    // return axios.get(`${this.repoSrc}/api/sizes?pagination[pageSize]=100`).then((res) => {
+    //   const list = res.data.data.map((item: any) => {
+    //     return {
+    //       value: item.id,
+    //       name: item.attributes.name,
+    //       width: Number(item.attributes.width),
+    //       height: Number(item.attributes.height),
+    //       unit: item.attributes.unit,
+    //     };
+    //   });
+    //   return list;
+    // }).catch(err=>{
+    //   return [{
+    //     value: "plmdefaultsize",
+    //     name: "工艺编辑器默认尺寸",
+    //     width: 900,
+    //     height: 1020,
+    //     unit: "px",
+    //   }]
+    // });
   }
   getFontList() {
     return axios.get(`${this.repoSrc}/api/fonts?pagination[pageSize]=100`).then((res) => {

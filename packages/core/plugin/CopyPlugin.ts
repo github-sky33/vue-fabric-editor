@@ -113,7 +113,7 @@ class CopyPlugin implements IPluginTempl {
   contextMenu() {
     const activeObject = this.canvas.getActiveObject();
     if (activeObject) {
-      return [{ text: '复制', hotkey: 'Ctrl+V', disabled: false, onclick: () => this.clone() }];
+      return [{ text: '复制', hotkey: 'Ctrl+C', disabled: false, onclick: () => this.clone() }];
     }
   }
 

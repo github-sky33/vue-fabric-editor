@@ -19,7 +19,7 @@
           <Divider type="vertical" />
           <import-file></import-file>
           <Divider type="vertical" />
-          <Button type="text" to="/template" target="_blank">全部模板</Button>
+          <!-- <Button type="text" to="/template" target="_blank">全部模板</Button> -->
           <Divider type="vertical" />
 
           <myTemplName></myTemplName>
@@ -37,21 +37,22 @@
         </div>
 
         <div class="right">
-          <a href="https://github.com/nihaojob/vue-fabric-editor" target="_blank">
+          <!-- <a href="https://github.com/nihaojob/vue-fabric-editor" target="_blank">
             <img
               src="https://camo.githubusercontent.com/f440bed74efe64ce92599748090837ec92cc33ead4bf29d115d9745af1415c19/68747470733a2f2f62616467656e2e6e65742f6769746875622f73746172732f6e6968616f6a6f622f7675652d6661627269632d656469746f72"
               alt="vue-fbric-editor"
             />
-          </a>
+          </a> -->
           <!-- 管理员模式 -->
-          <admin />
+          <!-- <admin /> -->
           <!-- 预览 -->
           <previewCurrent />
           <waterMark />
           <save></save>
-          <login></login>
-          <lang></lang>
+          <!-- <login></login> -->
+          <!-- <lang></lang> -->
         </div>
+        <div />
       </Header>
       <Content style="display: flex; height: calc(100vh - 64px)">
         <!-- 左侧区域 -->
@@ -192,7 +193,7 @@ import centerAlign from '@/components/centerAlign.vue';
 import flip from '@/components/flip.vue';
 import previewCurrent from '@/components/previewCurrent';
 import save from '@/components/save.vue';
-import lang from '@/components/lang.vue';
+// import lang from '@/components/lang.vue';
 import clone from '@/components/clone.vue';
 import hide from '@/components/hide.vue';
 import group from '@/components/group.vue';
@@ -201,14 +202,14 @@ import dragMode from '@/components/dragMode.vue';
 import lock from '@/components/lock.vue';
 import dele from '@/components/del.vue';
 import waterMark from '@/components/waterMark.vue';
-import login from '@/components/login';
-import admin from '@/components/admin';
+// import login from '@/components/login';
+// import admin from '@/components/admin';
 // 左侧组件
-import importTmpl from '@/components/importTmpl.vue';
-import fontStyle from '@/components/fontStyle.vue';
-import myMaterial from '@/components/myMaterial/index.vue';
+// import importTmpl from '@/components/importTmpl.vue';
+// import fontStyle from '@/components/fontStyle.vue';
+// import myMaterial from '@/components/myMaterial/index.vue';
 import tools from '@/components/tools.vue';
-import material from '@/components/material.vue';
+// import material from '@/components/material.vue';
 import bgBar from '@/components/bgBar.vue';
 import setSize from '@/components/setSize.vue';
 import replaceImg from '@/components/replaceImg.vue';
@@ -294,55 +295,55 @@ const state = reactive({
 });
 
 // 左侧菜单渲染
-const menuActive = ref('importTmpl');
+const menuActive = ref('tools');
 const leftBarComponent = {
-  importTmpl,
+  // importTmpl,
   tools,
-  material,
-  fontStyle,
+  // material,
+  // fontStyle,
   layer,
-  myMaterial,
+  // myMaterial,
 };
 
 // fix: 修复vue-i18n function "t" not reactive inside ref object
 // https://github.com/intlify/vue-i18n/issues/1396#issuecomment-1716123143
 const leftBar = reactive([
-  {
-    //模板
-    key: 'importTmpl',
-    name: computed(() => t('templates')),
-    icon: 'md-book',
-  },
+  // {
+  //   //模板
+  //   key: 'importTmpl',
+  //   name: computed(() => t('templates')),
+  //   icon: 'md-book',
+  // },
   {
     //基础元素
     key: 'tools',
     name: computed(() => t('elements')),
     icon: 'md-images',
   },
-  {
-    //字体样式
-    key: 'fontStyle',
-    name: computed(() => t('font_style')),
-    icon: 'ios-pulse',
-  },
-  {
-    // 图片元素
-    key: 'material',
-    name: computed(() => t('material.cartoon')),
-    icon: 'ios-leaf-outline',
-  },
+  // {
+  //   //字体样式
+  //   key: 'fontStyle',
+  //   name: computed(() => t('font_style')),
+  //   icon: 'ios-pulse',
+  // },
+  // {
+  //   // 图片元素
+  //   key: 'material',
+  //   name: computed(() => t('material.cartoon')),
+  //   icon: 'ios-leaf-outline',
+  // },
   {
     // 图层
     key: 'layer',
     name: computed(() => t('layers')),
     icon: 'md-reorder',
   },
-  {
-    // 用户素材
-    key: 'myMaterial',
-    name: computed(() => t('mine')),
-    icon: 'ios-contact-outline',
-  },
+  // {
+  //   // 用户素材
+  //   key: 'myMaterial',
+  //   name: computed(() => t('mine')),
+  //   icon: 'ios-contact-outline',
+  // },
 ]);
 
 onMounted(() => {
