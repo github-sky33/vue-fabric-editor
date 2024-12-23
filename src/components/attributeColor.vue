@@ -16,6 +16,13 @@
     "
   >
     <Divider plain orientation="left"><h4>颜色</h4></Divider>
+    <!-- 预选颜色 -->
+    <div class="color-list">
+      <span class="pre-box">预选颜色：</span>
+      <template v-for="(item, i) in colorList" :key="item + i">
+        <span :style="`background:${item}`" @click="setTextColor(item)"></span>
+      </template>
+    </div>
     <!-- 通用属性 -->
     <div class="bg-item">
       <Tooltip placement="top" theme="light">
@@ -46,6 +53,14 @@ const angleKey = 'gradientAngle';
 const baseAttr = reactive({
   fill: '#ffffffff',
 });
+
+const colorList = ref([
+  '#FFFFFF',
+  '#FF0000',
+  '#FF1493',
+  '#000000',
+  '#ffffff00'
+]);
 
 // 属性获取
 const getObjectAttr = (e) => {
@@ -81,6 +96,16 @@ const colorChange = (value) => {
     canvasEditor.canvas.renderAll();
   }
 };
+
+const setTextColor = (value) => {
+  const activeObject = canvasEditor.canvas.getActiveObjects()[0];
+  if (activeObject) {
+    const color = String(value).replace('NaN', '');
+    activeObject.set('fill', color);
+    // baseAttr.fill = color;
+    canvasEditor.canvas.renderAll();
+  }
+}
 
 const dropColor = (value) => {
   colorChange(value);
@@ -164,5 +189,22 @@ onBeforeUnmount(() => {
 
 .ivu-row {
   margin-bottom: 10px;
+}
+.color-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 5px;
+  span {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .pre-box {
+    width: 80px;
+    border: none;
+  }
 }
 </style>

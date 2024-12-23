@@ -286,6 +286,12 @@ const LINE_TYPE = {
 // 默认属性
 const defaultPosition = { shadow: '', fontFamily: '宋体' };
 
+// 图形的默认属性
+const defaltGraphPosition = {
+  fill: '#FFF', // 背景颜色
+  stroke: 'rgba(11,11,11,1)', // 设置边框颜色
+}
+
 const { t } = useI18n();
 const { fabric, canvasEditor } = useSelect();
 const state = reactive({
@@ -311,7 +317,7 @@ const addTextBox = (event) => {
     splitByGrapheme: true,
     width: 400,
     fontSize: 50,
-    fill: '#000000FF',
+    fill: '#FF0000FF',
   });
 
   canvasEditor.addBaseType(text, { center: true, event });
@@ -321,9 +327,9 @@ const addTriangle = (event) => {
   cancelDraw();
   const triangle = new fabric.Triangle({
     ...defaultPosition,
+    ...defaltGraphPosition,
     width: 400,
     height: 400,
-    fill: '#92706BFF',
     name: '三角形',
   });
   canvasEditor.addBaseType(triangle, { center: true, event });
@@ -333,7 +339,7 @@ const addPolygon = (event) => {
   cancelDraw();
   const polygon = new fabric.Polygon(getPolygonVertices(5, 200), {
     ...defaultPosition,
-    fill: '#CCCCCCFF',
+    ...defaltGraphPosition,
     name: '多边形',
   });
   polygon.set({
@@ -353,8 +359,8 @@ const addCircle = (event) => {
   cancelDraw();
   const circle = new fabric.Circle({
     ...defaultPosition,
+    ...defaltGraphPosition,
     radius: 150,
-    fill: '#57606BFF',
     // id: uuid(),
     name: '圆形',
   });
@@ -365,7 +371,7 @@ const addRect = (event) => {
   cancelDraw();
   const rect = new fabric.Rect({
     ...defaultPosition,
-    fill: '#F57274FF',
+    ...defaltGraphPosition,
     width: 400,
     height: 400,
     name: '矩形',

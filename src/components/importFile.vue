@@ -25,34 +25,29 @@
       </template>
     </Dropdown>
     <!-- 插入字符串svg元素 -->
-    <Modal
-      v-model="state.showModal"
-      :title="$t('insertFile.modal_tittle')"
-      @on-ok="insertTypeHand('insertSvgStr')"
-      @on-cancel="showModal = false"
-    >
-      <Input
-        v-model="state.svgStr"
-        show-word-limit
-        type="textarea"
-        :placeholder="$t('insertFile.insert_SVGStr_placeholder')"
-      />
+    <Modal v-model="state.showModal" :title="$t('insertFile.modal_tittle')" @on-ok="insertTypeHand('insertSvgStr')"
+      @on-cancel="showModal = false">
+      <Input v-model="state.svgStr" show-word-limit type="textarea"
+        :placeholder="$t('insertFile.insert_SVGStr_placeholder')" />
     </Modal>
   </div>
 </template>
 
 <script name="ImportFile" setup>
 import { Utils } from '@kuaitu/core';
-const { getImgStr, selectFiles } = Utils;
+const { getImgStr, selectFiles, blobToBase64, base64ToBlob } = Utils;
 
 import useSelect from '@/hooks/select';
 import { v4 as uuid } from 'uuid';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
 
 const { fabric, canvasEditor } = useSelect();
 const state = reactive({
   showModal: false,
   svgStr: '',
 });
+const route = useRoute();
 const HANDLEMAP = {
   // 插入图片
   insertImg: function () {
@@ -127,6 +122,49 @@ function insertSvgFile(svgFile) {
     });
   });
 }
+
+// 从后端读取JSON文件下载路径，并进行转换后直接展示
+async function jsonFileConversion(url) {
+  const response = await axios.get(url, {
+    responseType: 'blob' // 确保响应类型为blob
+  });
+  const str = await blobToBase64(response.data)
+  const file = base64ToBlob(str)
+  canvasEditor.initJsonFile(file)
+}
+
+// 从后端读取图片文件下载路径，并进行转换后直接展示
+async function pngFileConversion(url) {
+  const response = await axios.get(url, {
+    responseType: 'blob' // 确保响应类型为blob
+  });
+  let str = await blobToBase64(response.data)
+  str = str.replace('text/xml', 'image/png')
+  insertImgFile(str)
+}
+
+// 获取文件信息并展示
+const getFileInfoShow = () => {
+  let oid = route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333'
+  axios.get(`/Windchill/servlet/rest/StructuredProcessPlan/v1/GetIllustrationInfo/${oid}`).then(res => {
+    const data = res.data
+    if (data.resultCode === '200') {
+      const filePath = data.data
+      if (filePath) {
+        if (filePath.jsonUrl) {
+          jsonFileConversion(filePath.jsonUrl)
+        } else {
+          pngFileConversion(filePath.url)
+        }
+      }
+    }
+  })
+}
+
+onMounted(() => {
+  getFileInfoShow()
+})
+
 </script>
 
 <style scoped lang="less">

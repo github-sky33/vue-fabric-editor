@@ -94,6 +94,7 @@ class CopyPlugin implements IPluginTempl {
 
   // 快捷键扩展回调
   hotkeyEvent(eventName: string, e: KeyboardEvent) {
+    return;
     if (eventName === 'ctrl+c' && e.type === 'keydown') {
       const activeObject = this.canvas.getActiveObject();
       this.cache = activeObject;
@@ -113,7 +114,8 @@ class CopyPlugin implements IPluginTempl {
   contextMenu() {
     const activeObject = this.canvas.getActiveObject();
     if (activeObject) {
-      return [{ text: '复制', hotkey: 'Ctrl+C', disabled: false, onclick: () => this.clone() }];
+      // return [{ text: '复制', hotkey: 'Ctrl+C', disabled: false, onclick: () => this.clone() }];
+      return [{ text: '复制', hotkey: '', disabled: false, onclick: () => this.clone() }];
     }
   }
 

@@ -20,6 +20,8 @@ type IPlugin = Pick<
   | 'clipboard'
   | 'clipboardBase64'
   | 'saveJson'
+  | 'saveImgAndJson'
+  | 'initJsonFile'
   | 'saveSvg'
   | 'saveImg'
   | 'clear'
@@ -55,6 +57,8 @@ class ServersPlugin implements IPluginTempl {
     'clipboard',
     'clipboardBase64',
     'saveJson',
+    'saveImgAndJson',
+    'initJsonFile',
     'saveSvg',
     'saveImg',
     'clear',
@@ -109,6 +113,18 @@ class ServersPlugin implements IPluginTempl {
         };
       }
     });
+  }
+
+  // 初始化时，从后台读取JSON文件
+  initJsonFile(files: any, callback?: () => void) {
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.readAsText(file, 'UTF-8');
+      reader.onload = () => {
+        this.loadJSON(reader.result as string, callback);
+      };
+    }
   }
 
   // 设置path属性
@@ -244,6 +260,26 @@ class ServersPlugin implements IPluginTempl {
       JSON.stringify(dataUrl, null, '\t')
     )}`;
     downFile(fileStr, 'json');
+  }
+
+  async saveImgAndJson() {
+    let imgUrl
+    this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
+      const option = this._getSaveOption();
+      this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+      imgUrl = this.canvas.toDataURL(option);
+    });
+
+    const dataUrl = this.getJson();
+    // 把文本text转为textgroup，让导入可以编辑
+    await transformText(dataUrl.objects);
+    const fileStr = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(dataUrl, null, '\t')
+    )}`;
+    return {
+      imgUrl,
+      dataUrl
+    }
   }
 
   saveSvg() {

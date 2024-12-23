@@ -57,12 +57,12 @@ class GroupPlugin implements IPluginTempl {
     const activeObject = this.canvas.getActiveObject();
 
     if (isActiveSelection(activeObject)) {
-      return [{ text: '组合', hotkey: 'Ctrl+V', disabled: false, onclick: () => this.group() }];
+      return [{ text: '组合', hotkey: '', disabled: false, onclick: () => this.group() }];
     }
 
     if (isGroup(activeObject)) {
       return [
-        { text: '拆分组合', hotkey: 'Ctrl+V', disabled: false, onclick: () => this.unGroup() },
+        { text: '拆分组合', hotkey: '', disabled: false, onclick: () => this.unGroup() },
       ];
     }
   }

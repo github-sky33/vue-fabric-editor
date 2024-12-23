@@ -19,12 +19,12 @@ declare module '@kuaitu/core' {
 class DeleteHotKeyPlugin implements IPluginTempl {
   static pluginName = 'DeleteHotKeyPlugin';
   static apis = ['del'];
-  hotkeys: string[] = ['backspace'];
+  hotkeys: string[] = ['delete'];
   constructor(public canvas: fabric.Canvas, public editor: IEditor) {}
 
   // 快捷键扩展回调
   hotkeyEvent(eventName: string, e: KeyboardEvent) {
-    if (e.type === 'keydown' && eventName === 'backspace') {
+    if (e.type === 'keydown' && eventName === 'delete') {
       this.del();
     }
   }
@@ -44,7 +44,7 @@ class DeleteHotKeyPlugin implements IPluginTempl {
     if (activeObject) {
       return [
         null,
-        { text: '删除', hotkey: 'Backspace', disabled: false, onclick: () => this.del() },
+        { text: '删除', hotkey: 'Del', disabled: false, onclick: () => this.del() },
       ];
     }
   }

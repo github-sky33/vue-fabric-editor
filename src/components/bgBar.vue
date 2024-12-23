@@ -41,6 +41,7 @@ import useSelect from '@/hooks/select';
 const { mixinState, canvasEditor } = useSelect();
 
 const colorList = ref([
+  '#FFF',
   '#5F2B63',
   '#B23554',
   '#F27E56',

@@ -60,15 +60,27 @@ class DrawLinePlugin implements IPluginTempl {
       switch (this.lineType) {
         case 'line':
           NodeHandler = fabric.Line;
+          opts = {
+            strokeWidth: 2,
+            stroke: '#ff0000',
+            fill: '#ff0000',
+            id: uuid(),
+          };
           break;
         case 'arrow':
           NodeHandler = Arrow;
+          opts = {
+            strokeWidth: 2,
+            stroke: '#ff0000',
+            fill: '#ff0000',
+            id: uuid(),
+          };
           break;
         case 'thinTailArrow':
           NodeHandler = ThinTailArrow;
           opts = {
             strokeWidth: 2,
-            stroke: '#ff0000',
+            stroke: '#fff',
             fill: '#ff0000',
             id: uuid(),
           };

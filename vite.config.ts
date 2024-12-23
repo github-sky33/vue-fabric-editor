@@ -35,7 +35,7 @@ const config = ({ mode }) => {
       vueSetupExtend(),
       // 增加下面的配置项,这样在运行时就能检查eslint规范
       eslintPlugin({
-        include: ['src/**/*.js', 'src/**/*.vue', 'src/*.js', 'src/*.vue'],
+        include: ['src/**/*.js', 'src/*.js', 'src/*.vue'],
       }),
       vueJsx({
         // options are passed on to @vue/babel-plugin-jsx
@@ -101,8 +101,8 @@ const config = ({ mode }) => {
       port: 3000,
       open: true,
       proxy: {
-        '/fontFile': {
-          target: 'https://github.com/',
+        '/Windchill': {
+          target: 'http://10.6.14.210/',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/fontFile/, ''),
         },

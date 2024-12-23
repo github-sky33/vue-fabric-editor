@@ -9,6 +9,13 @@
   <div class="box attr-item-box" v-if="mixinState.mSelectMode === 'one' && !isGroup">
     <!-- <h3>边框</h3> -->
     <Divider plain orientation="left"><h4>边框</h4></Divider>
+    <!-- 预选颜色 -->
+    <div class="color-list">
+      <span class="pre-box">预选颜色：</span>
+      <template v-for="(item, i) in colorList" :key="item + i">
+        <span class="box-color" :style="`background:${item}`" @click="setBorderLineColor('stroke', item)"></span>
+      </template>
+    </div>
     <!-- 通用属性 -->
     <div>
       <Row :gutter="12">
@@ -70,6 +77,14 @@ const baseAttr = reactive({
   strokeWidth: 0,
   strokeDashArray: [],
 });
+
+const colorList = ref([
+  '#FFFFFF',
+  '#FF0000',
+  '#FF1493',
+  '#000000',
+  '#ffffff00'
+]);
 
 const strokeDashList = [
   {
@@ -154,7 +169,7 @@ const getObjectAttr = (e) => {
   // 不是当前obj，跳过
   if (e && e.target && e.target !== activeObject) return;
   if (activeObject && !groupType.includes(activeObject.type)) {
-    baseAttr.stroke = activeObject.get('stroke');
+    // baseAttr.stroke = activeObject.get('stroke');
     baseAttr.strokeWidth = activeObject.get('strokeWidth');
     const strokeDashArray = JSON.stringify(activeObject.get('strokeDashArray') || []);
     const target = strokeDashList.find((item) => {
@@ -178,6 +193,15 @@ const changeCommon = (key, value) => {
     canvasEditor.canvas.renderAll();
   }
 };
+
+// 设置边框Line的颜色
+const setBorderLineColor = (key, value) => {
+  const activeObject = canvasEditor.canvas.getActiveObjects()[0];
+  if (activeObject) {
+    activeObject.set(key, value);
+    canvasEditor.canvas.renderAll();
+  }
+}
 
 // 边框设置
 const borderSet = (key) => {
@@ -241,6 +265,23 @@ onBeforeUnmount(() => {
       border: none !important;
       box-shadow: none !important;
     }
+  }
+}
+.color-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 5px;
+  span {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .pre-box {
+    width: 80px;
+    border: none;
   }
 }
 </style>

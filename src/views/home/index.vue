@@ -151,6 +151,8 @@
               <attribute-text-content></attribute-text-content>
               <!-- 位置信息 -->
               <attributePostion></attributePostion>
+              <!-- 图片大小 -->
+              <attributeImageSize></attributeImageSize>
               <!-- 阴影 -->
               <attributeShadow></attributeShadow>
               <!-- 边框 -->
@@ -158,7 +160,7 @@
               <!-- 圆角 -->
               <attributeRounded></attributeRounded>
               <!-- 关联数据 -->
-              <attributeId></attributeId>
+              <!-- <attributeId></attributeId> -->
 
               <!-- 新增字体样式使用 -->
               <Button @click="canvasEditor.getFontJson()" size="small">获取元素数据</Button>
@@ -221,6 +223,7 @@ import history from '@/components/history.vue';
 import layer from '@/components/layer.vue';
 // import attribute from '@/components/attribute.vue';
 import attributePostion from '@/components/attributePostion.vue';
+import attributeImageSize from '@/components/attributeImageSize.vue';
 import attributeId from '@/components/attributeId.vue';
 import attributeShadow from '@/components/attributeShadow.vue';
 import attributeBorder from '@/components/attributeBorder.vue';
