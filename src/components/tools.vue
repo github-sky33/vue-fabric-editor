@@ -290,7 +290,7 @@ const defaultPosition = { shadow: '', fontFamily: '宋体' };
 const defaltGraphPosition = {
   fill: '#FFF', // 背景颜色
   stroke: 'rgba(11,11,11,1)', // 设置边框颜色
-}
+};
 
 const { t } = useI18n();
 const { fabric, canvasEditor } = useSelect();
@@ -303,8 +303,9 @@ const addText = (event) => {
   cancelDraw();
   const text = new fabric.IText(t('everything_is_fine'), {
     ...defaultPosition,
-    fontSize: 50,
+    fontSize: 25,
     fill: '#FF0000FF',
+    fontFamily: '宋体',
   });
 
   canvasEditor.addBaseType(text, { center: true, event });
@@ -316,8 +317,9 @@ const addTextBox = (event) => {
     ...defaultPosition,
     splitByGrapheme: true,
     width: 400,
-    fontSize: 50,
+    fontSize: 25,
     fill: '#FF0000FF',
+    fontFamily: '宋体',
   });
 
   canvasEditor.addBaseType(text, { center: true, event });
@@ -328,24 +330,28 @@ const addTriangle = (event) => {
   const triangle = new fabric.Triangle({
     ...defaultPosition,
     ...defaltGraphPosition,
-    width: 400,
-    height: 400,
     name: '三角形',
+    width: 50,
+    height: 50,
+    strokeWidth: 2,
+    fill: '#ffffff00', // 背景颜色
   });
   canvasEditor.addBaseType(triangle, { center: true, event });
 };
 
 const addPolygon = (event) => {
   cancelDraw();
-  const polygon = new fabric.Polygon(getPolygonVertices(5, 200), {
+  const polygon = new fabric.Polygon(getPolygonVertices(5, 30), {
     ...defaultPosition,
     ...defaltGraphPosition,
     name: '多边形',
+    strokeWidth: 2,
+    fill: '#ffffff00', // 背景颜色
   });
   polygon.set({
     // 创建完设置宽高，不然宽高会变成自动的值
-    width: 400,
-    height: 400,
+    // width: 50,
+    // height: 50,
     // 关闭偏移
     pathOffset: {
       x: 0,
@@ -360,7 +366,10 @@ const addCircle = (event) => {
   const circle = new fabric.Circle({
     ...defaultPosition,
     ...defaltGraphPosition,
-    radius: 150,
+    radius: 25,
+    stroke: '#FF0000',
+    fill: '#ffffff00', // 背景颜色
+    strokeWidth: 2,
     // id: uuid(),
     name: '圆形',
   });
@@ -372,9 +381,11 @@ const addRect = (event) => {
   const rect = new fabric.Rect({
     ...defaultPosition,
     ...defaltGraphPosition,
-    width: 400,
-    height: 400,
+    width: 150,
+    height: 50,
+    strokeWidth: 2,
     name: '矩形',
+    fill: '#ffffff00', // 背景颜色
   });
 
   canvasEditor.addBaseType(rect, { center: true, event });

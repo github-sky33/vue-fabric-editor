@@ -19,8 +19,12 @@
     <!-- 预选颜色 -->
     <div class="color-list">
       <span class="pre-box">预选颜色：</span>
-      <template v-for="(item, i) in colorList" :key="item + i">
-        <span :style="`background:${item}`" @click="setTextColor(item)"></span>
+      <template v-for="(item, i) in colorList" :key="item.color + i">
+        <span
+          :style="`background:${item.color}`"
+          @click="setTextColor(item.color)"
+          :title="item.name"
+        ></span>
       </template>
     </div>
     <!-- 通用属性 -->
@@ -55,11 +59,11 @@ const baseAttr = reactive({
 });
 
 const colorList = ref([
-  '#FFFFFF',
-  '#FF0000',
-  '#FF1493',
-  '#000000',
-  '#ffffff00'
+  { color: '#FFFFFF', name: '白' },
+  { color: '#FF0000', name: '红' },
+  { color: '#FF1493', name: '品红' },
+  { color: '#000000', name: '黑' },
+  { color: '#ffffff00', name: '透明' },
 ]);
 
 // 属性获取
@@ -102,10 +106,18 @@ const setTextColor = (value) => {
   if (activeObject) {
     const color = String(value).replace('NaN', '');
     activeObject.set('fill', color);
+    // 箭头统一更新 填充与边框
+    if (
+      'thinTailArrow' == activeObject.type ||
+      'arrow' == activeObject.type ||
+      'line' == activeObject.type
+    ) {
+      activeObject.set('stroke', color);
+    }
     // baseAttr.fill = color;
     canvasEditor.canvas.renderAll();
   }
-}
+};
 
 const dropColor = (value) => {
   colorChange(value);

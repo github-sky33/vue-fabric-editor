@@ -17,6 +17,7 @@ export interface Selector {
   mSelectId: string | undefined;
   mSelectIds: (string | undefined)[];
   mSelectActive: unknown[];
+  showSizeEditor: boolean | undefined;
 }
 
 export default function useSelectListen(canvasEditor: Editor) {
@@ -26,6 +27,7 @@ export default function useSelectListen(canvasEditor: Editor) {
     mSelectId: '', // 选择id
     mSelectIds: [], // 选择id
     mSelectActive: [],
+    showSizeEditor: false, //是否显示图片大小的编辑器 attributeImageSize
   });
 
   const selectOne = (e: [fabric.Object]) => {
@@ -42,6 +44,15 @@ export default function useSelectListen(canvasEditor: Editor) {
       state.mSelectId = e[0].id;
       state.mSelectOneType = e[0].type;
       state.mSelectIds = e.map((item) => item.id);
+      if (
+        'rect' == state.mSelectOneType ||
+        'image' == state.mSelectOneType ||
+        'triangle' == state.mSelectOneType
+      ) {
+        state.showSizeEditor = true;
+      } else {
+        state.showSizeEditor = false;
+      }
     }
   };
 
@@ -49,6 +60,7 @@ export default function useSelectListen(canvasEditor: Editor) {
     state.mSelectMode = SelectMode.MULTI;
     state.mSelectId = '';
     state.mSelectIds = e.map((item) => item.id);
+    state.showSizeEditor = false;
   };
 
   const selectCancel = () => {
@@ -56,6 +68,7 @@ export default function useSelectListen(canvasEditor: Editor) {
     state.mSelectIds = [];
     state.mSelectMode = SelectMode.EMPTY;
     state.mSelectOneType = '';
+    state.showSizeEditor = false;
   };
 
   onMounted(() => {

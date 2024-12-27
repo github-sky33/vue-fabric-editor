@@ -10,7 +10,12 @@
 
 <template>
   <div class="save-box">
-    <Button style="margin-left: 10px" type="primary" :disabled="disabled" @click="handleSaveToProcess">
+    <Button
+      style="margin-left: 10px"
+      type="primary"
+      :disabled="disabled"
+      @click="handleSaveToProcess"
+    >
       保存
     </Button>
     <Button type="text" @click="beforeClear">
@@ -26,8 +31,8 @@
           <!-- <DropdownItem name="saveMyClould">{{ $t('save.save_my_spase') }}</DropdownItem> -->
           <DropdownItem name="saveImg" divided>{{ $t('save.save_as_picture') }}</DropdownItem>
           <DropdownItem name="saveSvg">{{ $t('save.save_as_svg') }}</DropdownItem>
-          <DropdownItem name="clipboard" divided>{{ $t('save.copy_to_clipboard') }}</DropdownItem>
-          <DropdownItem name="clipboardBase64">{{ $t('save.copy_to_clipboardstr') }}</DropdownItem>
+          <!-- <DropdownItem name="clipboard" divided>{{ $t('save.copy_to_clipboard') }}</DropdownItem> -->
+          <!-- <DropdownItem name="clipboardBase64">{{ $t('save.copy_to_clipboardstr') }}</DropdownItem> -->
           <DropdownItem name="saveJson" divided>{{ $t('save.save_as_json') }}</DropdownItem>
         </DropdownMenu>
       </template>
@@ -108,54 +113,55 @@ const clear = () => {
   canvasEditor.historyUpdate();
 };
 
-const disabled = ref(true)
+const disabled = ref(true);
 
 // 图片和JSON文件都保存到结构化工艺后端
 const handleSaveToProcess = () => {
-  let result = canvasEditor.saveImgAndJson()
+  let result = canvasEditor.saveImgAndJson();
   result.then(async (resObj) => {
-    const cacheDesResult = await getCacheDescriptorServlet()
-    const urlUpload = "/Windchill/" + cacheDesResult["uploadUrl"].split("/Windchill/")[1]
-    const masterUrl = cacheDesResult["masterUrl"]
-    const cacheStrs = cacheDesResult.cacheDescriptors[0].split(';')
-    let filePrames1 = new FormData()
-    let filePrames2 = new FormData()
+    const cacheDesResult = await getCacheDescriptorServlet();
+    const urlUpload = '/Windchill/' + cacheDesResult['uploadUrl'].split('/Windchill/')[1];
+    const masterUrl = cacheDesResult['masterUrl'];
+    const cacheStrs = cacheDesResult.cacheDescriptors[0].split(';');
+    let filePrames1 = new FormData();
+    let filePrames2 = new FormData();
 
     // 图标文件类型转换
-    const jsonStrings1 = JSON.stringify(resObj.imgUrl); //转成字符串
-    // const blob1 = new Blob([jsonStrings1],{type:'image/png'}); // 创建Blob对象
-    // const file1 = new window.File([Blob],'fileName.png',{type:'image/png'}); //转成文件
-    const file1 = base64ToBlob(resObj.imgUrl)
-    filePrames1.append("Master_URL", masterUrl)
-    filePrames1.append("CacheDescriptor_array", cacheStrs[0])
-    filePrames1.append("primaryFilepathInput", file1[0])
+    // const blob1 = new Blob([resObj.svgData], { type:"image/svg+xml"}); // 创建Blob对象
+    // const file1 = new window.File([blob1],'illstration_image_1.svg',{type:'image/svg+xml'}); //转成文件
+    const file1 = base64ToBlob(resObj.imgUrl);
+    filePrames1.append('Master_URL', masterUrl);
+    filePrames1.append('CacheDescriptor_array', cacheStrs[0]);
+    filePrames1.append('primaryFilepathInput', file1[0]);
 
     // json文件类型转换
     const jsonStrings2 = JSON.stringify(resObj.dataUrl); //转成字符串
     const blob2 = new Blob([jsonStrings2], { type: 'application/json' }); // 创建Blob对象
     const file2 = new File([blob2], 'fileName.json', { type: 'application/json' }); //转成文件
-    filePrames2.append("Master_URL", masterUrl)
-    filePrames2.append("CacheDescriptor_array", cacheStrs[1])
-    filePrames2.append("primaryFilepathInput", file2)
+    filePrames2.append('Master_URL', masterUrl);
+    filePrames2.append('CacheDescriptor_array', cacheStrs[1]);
+    filePrames2.append('primaryFilepathInput', file2);
 
     // 做第二次请求，上传图片文件内容
-    const result1 = axios.post(urlUpload, filePrames1)
-    const result2 = axios.post(urlUpload, filePrames2)
-    Promise.all([result1, result2]).then(response => {
-      let matchReg = /(?<=value=").*?(?=.">)/gi
+    const result1 = axios.post(urlUpload, filePrames1);
+    const result2 = axios.post(urlUpload, filePrames2);
+    Promise.all([result1, result2]).then((response) => {
+      let matchReg = /(?<=value=").*?(?=.">)/gi;
       // 截取后端返回的文件序列号，填入到对应的传参中
-      const imgDescriptor = response[0].data.match(matchReg)[2]
-      const jsonDescriptor = response[1].data.match(matchReg)[2]
-      const cacheDesUrl = '/Windchill/servlet/rest/StructuredProcessPlan/v1/UploadIllustration'
-      const oid = route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333'
+      const imgDescriptor = response[0].data.match(matchReg)[2];
+      const jsonDescriptor = response[1].data.match(matchReg)[2];
+      const cacheDesUrl = '/Windchill/servlet/rest/StructuredProcessPlan/v1/UploadIllustration';
+      const oid =
+        route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333';
       if (imgDescriptor && jsonDescriptor) {
         let params = {
           objectId: oid,
           cacheDescriptor: imgDescriptor,
-          jsonCacheDescriptor: jsonDescriptor
-        }
-        axios.post(cacheDesUrl, params).then(res => {
-          const data = res.data
+          jsonCacheDescriptor: jsonDescriptor,
+          // filename: "illstration_image_1.svg"
+        };
+        axios.post(cacheDesUrl, params).then((res) => {
+          const data = res.data;
           if (data.resultCode === '200') {
             Message.success('文件保存成功！');
           } else {
@@ -164,26 +170,30 @@ const handleSaveToProcess = () => {
               content: `<p>${data.errors.join()}</p>`,
             });
           }
-        })
+        });
       }
-    })
+    });
 
     // const str = await blobToBase64(file1[0])
     // downFile(str, 'png')
-  })
-
-}
+  });
+};
 
 // 获取附件上传地址
 const getCacheDescriptorServlet = () => {
-  let oid = route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333'
-  oid = oid.replace('OR:', '')
+  let oid = route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333';
+  oid = oid.replace('OR:', '');
   return new Promise((resolve, reject) => {
-    axios.get('/Windchill/servlet/GetCacheDescriptorServlet?fileCount=2&contentIdentities=1;;;zzz2&random=0.7997197697741049&securityLabel=&primaryOidString=' + oid).then(res => {
-      resolve(eval('(' + res.data + ')'))
-    })
-  })
-}
+    axios
+      .get(
+        '/Windchill/servlet/GetCacheDescriptorServlet?fileCount=2&contentIdentities=1;;;zzz2&random=0.7997197697741049&securityLabel=&primaryOidString=' +
+          oid
+      )
+      .then((res) => {
+        resolve(eval('(' + res.data + ')'));
+      });
+  });
+};
 
 const base64ToBlob = (base64Data) => {
   if (!base64Data) {
@@ -198,25 +208,27 @@ const base64ToBlob = (base64Data) => {
     uint8Array[i] = textData.charCodeAt(i);
   }
   return [new Blob([arrayBuffer], { type: imageType }), imageType.slice(6)];
-}
+};
 
 const getFileInfoShow = () => {
-  let oid = route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333'
-  axios.get(`/Windchill/servlet/rest/StructuredProcessPlan/v1/GetIllustrationInfo/${oid}`).then(res => {
-    const data = res.data
-    if (data.resultCode === '200') {
-      if (data.data) {
-        disabled.value = (data.data.workingCopy)? false : true;
-      } else {
-        disabled.value = false
+  let oid = route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333';
+  axios
+    .get(`/Windchill/servlet/rest/StructuredProcessPlan/v1/GetIllustrationInfo/${oid}`)
+    .then((res) => {
+      const data = res.data;
+      if (data.resultCode === '200') {
+        if (data.data) {
+          disabled.value = data.data.workingCopy ? false : true;
+        } else {
+          disabled.value = false;
+        }
       }
-    }
-  })
-}
+    });
+};
 
 onMounted(() => {
-  getFileInfoShow()
-})
+  getFileInfoShow();
+});
 
 const beforeClear = () => {
   Modal.confirm({

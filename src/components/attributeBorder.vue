@@ -12,8 +12,13 @@
     <!-- 预选颜色 -->
     <div class="color-list">
       <span class="pre-box">预选颜色：</span>
-      <template v-for="(item, i) in colorList" :key="item + i">
-        <span class="box-color" :style="`background:${item}`" @click="setBorderLineColor('stroke', item)"></span>
+      <template v-for="(item, i) in colorList" :key="item.color + i">
+        <span
+          class="box-color"
+          :style="`background:${item.color}`"
+          @click="setBorderLineColor('stroke', item.color)"
+          :title="item.name"
+        ></span>
       </template>
     </div>
     <!-- 通用属性 -->
@@ -79,11 +84,11 @@ const baseAttr = reactive({
 });
 
 const colorList = ref([
-  '#FFFFFF',
-  '#FF0000',
-  '#FF1493',
-  '#000000',
-  '#ffffff00'
+  { color: '#FFFFFF', name: '白' },
+  { color: '#FF0000', name: '红' },
+  { color: '#FF1493', name: '品红' },
+  { color: '#000000', name: '黑' },
+  { color: '#ffffff00', name: '透明' },
 ]);
 
 const strokeDashList = [
@@ -201,7 +206,7 @@ const setBorderLineColor = (key, value) => {
     activeObject.set(key, value);
     canvasEditor.canvas.renderAll();
   }
-}
+};
 
 // 边框设置
 const borderSet = (key) => {

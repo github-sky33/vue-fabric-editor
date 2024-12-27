@@ -29,6 +29,7 @@
                 long
                 :icon="item.isLock ? 'md-lock' : 'md-unlock'"
                 type="text"
+                :class="{ 'locked-text': item.isLock }"
                 @click="doLock(item)"
               ></Button>
             </Col>
@@ -250,5 +251,8 @@ span {
       fill: #2d8cf0;
     }
   }
+}
+.locked-text {
+  color: red;
 }
 </style>

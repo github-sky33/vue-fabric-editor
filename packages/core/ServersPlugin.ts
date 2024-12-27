@@ -263,11 +263,17 @@ class ServersPlugin implements IPluginTempl {
   }
 
   async saveImgAndJson() {
-    let imgUrl
+    let imgUrl = '';
+    let svgData;
     this.editor.hooksEntity.hookSaveBefore.callAsync('', () => {
       const option = this._getSaveOption();
       this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
       imgUrl = this.canvas.toDataURL(option);
+      // const { fontOption, svgOption } = this._getSaveSvgOption();
+      // fabric.fontPaths = {
+      //   ...fontOption,
+      // };
+      // svgData = this.canvas.toSVG(svgOption);
     });
 
     const dataUrl = this.getJson();
@@ -278,8 +284,9 @@ class ServersPlugin implements IPluginTempl {
     )}`;
     return {
       imgUrl,
-      dataUrl
-    }
+      dataUrl,
+      svgData,
+    };
   }
 
   saveSvg() {

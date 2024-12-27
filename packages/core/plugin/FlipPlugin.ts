@@ -34,13 +34,13 @@ export default class FlipPlugin implements IPluginTempl {
           hotkey: '❯',
           subitems: [
             {
-              text: t('flip.x'),
-              hotkey: '|',
+              text: '水平翻转',
+              //hotkey: '|',
               onclick: () => this.flip('X'),
             },
             {
-              text: t('flip.y'),
-              hotkey: '-',
+              text: '垂直翻转',
+              //hotkey: '-',
               onclick: () => this.flip('Y'),
             },
           ],
