@@ -152,7 +152,7 @@
               <!-- 位置信息 -->
               <attributePostion></attributePostion>
               <!-- 图片大小 -->
-              <attributeImageSize v-show="mixinState.showSizeEditor"></attributeImageSize>
+              <attributeImageSize></attributeImageSize>
               <!-- 阴影 -->
               <attributeShadow></attributeShadow>
               <!-- 边框 -->

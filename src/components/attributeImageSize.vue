@@ -1,5 +1,6 @@
 <template>
-  <div class="box attr-item-box" v-if="mixinState.mSelectMode === 'one' && isShowContent">
+  <!-- <div class="box attr-item-box" v-show="mixinState.showSizeEditor"> -->
+  <div class="box attr-item-box" v-show="showAble(mixinState)">
     <Divider plain orientation="left">
       <h4>图片大小</h4>
     </Divider>
@@ -40,7 +41,17 @@ const baseAttr = reactive({
   displayWidth: 0,
 });
 
-const isShowContent = ref(true)
+const showAble = (mixinState)=>{
+  if (!mixinState || mixinState.mSelectMode != "one") {
+    return false;
+  }else if ( 'rect' == mixinState.mSelectOneType || 'image' == mixinState.mSelectOneType || 
+    'triangle' == mixinState.mSelectOneType) {
+    return true;
+  } else {
+    return false;
+  };
+
+};
 
 // 属性获取
 const getObjectAttr = (e) => {
@@ -54,8 +65,7 @@ const getObjectAttr = (e) => {
     baseAttr.width = activeObject.get('width');
     baseAttr.displayHeight = baseAttr.scaleY * baseAttr.height;
     baseAttr.displayWidth = baseAttr.scaleX * baseAttr.width;
-    // 如果是文本，则不展示图片大小
-    isShowContent.value = !activeObject.text
+
   }
 };
 
