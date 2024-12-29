@@ -191,7 +191,21 @@ const getObjectAttr = (e) => {
 const changeCommon = (key, value) => {
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
   if (activeObject) {
-    activeObject && activeObject.set(key, value);
+    if ("textBackgroundColor"==key) {
+      if (activeObject.isEditing) {
+        activeObject.setSelectionStyles({'textBackgroundColor': value});
+      } else {
+        activeObject.textBackgroundColor = value;
+        let s = activeObject.styles;
+        for (let i in s) {
+            for (let j in s[i]) {
+                s[i][j].textBackgroundColor = value;
+            }
+        }
+      }
+    } else {
+      activeObject && activeObject.set(key, value);
+    }
     canvasEditor.canvas.renderAll();
   }
 };
@@ -209,16 +223,37 @@ const changeFontWeight = (key, value) => {
   const nValue = value === 'normal' ? 'bold' : 'normal';
   baseAttr.fontWeight = nValue;
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
-  activeObject && activeObject.set(key, nValue);
+  // activeObject && activeObject.set(key, nValue);
+  debugger
+  doFontChange(activeObject, key, nValue);
   canvasEditor.canvas.renderAll();
 };
+
+// 执行改变
+const doFontChange=(activeObject, key, value) =>{
+  if (activeObject) {
+    if (activeObject.isEditing && activeObject.getSelectionStyles().length>0) {
+      // 编辑状态
+      activeObject.setSelectionStyles({[key]: value});
+    } else {
+      activeObject && activeObject.set(key, value);
+      let s = activeObject.styles;
+      for (let i in s) {
+        for (let j in s[i]) {
+            s[i][j][key] = value;
+        }
+      }
+    }
+  }
+}
 
 // 斜体
 const changeFontStyle = (key, value) => {
   const nValue = value === 'normal' ? 'italic' : 'normal';
   baseAttr.fontStyle = nValue;
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
-  activeObject && activeObject.set(key, nValue);
+  // activeObject && activeObject.set(key, nValue);
+  doFontChange(activeObject, key, nValue);
   canvasEditor.canvas.renderAll();
 };
 
@@ -227,7 +262,8 @@ const changeLineThrough = (key, value) => {
   const nValue = value === false;
   baseAttr.linethrough = nValue;
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
-  activeObject && activeObject.set(key, nValue);
+  // activeObject && activeObject.set(key, nValue);
+  doFontChange(activeObject, key, nValue);
   canvasEditor.canvas.renderAll();
 };
 
@@ -236,7 +272,8 @@ const changeUnderline = (key, value) => {
   const nValue = value === false;
   baseAttr.underline = nValue;
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
-  activeObject && activeObject.set(key, nValue);
+  // activeObject && activeObject.set(key, nValue);
+  doFontChange(activeObject, key, nValue);
   canvasEditor.canvas.renderAll();
 };
 

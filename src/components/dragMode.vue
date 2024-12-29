@@ -10,8 +10,9 @@
   <div class="box">
     <Switch size="large" v-model="status" @on-change="switchMode">
       <template #open>
-        <span>Drag</span>
+        <span>拖动</span>
       </template>
+      <template #close><span>选择</span></template>
     </Switch>
   </div>
 </template>

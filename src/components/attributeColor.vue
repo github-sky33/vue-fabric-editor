@@ -86,8 +86,15 @@ const colorChange = (value) => {
   if (activeObject) {
     const color = String(value.color).replace('NaN', '');
     if (value.mode === '纯色') {
-      activeObject.set('fill', color);
+      if (isTextType) {
+        changeTextColor(activeObject, color);
+      } else {
+        activeObject.set('fill', color);
+      }
     } else if (value.mode === '渐变') {
+      if (isTextType) {
+        return ;
+      }
       const currentGradient = cssToFabricGradient(
         toRaw(value.stops),
         activeObject.width,
@@ -105,7 +112,12 @@ const setTextColor = (value) => {
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
   if (activeObject) {
     const color = String(value).replace('NaN', '');
-    activeObject.set('fill', color);
+    if (isTextType(activeObject)) {
+      changeTextColor(activeObject, color);
+    } else {
+      activeObject.set('fill', color);
+    }
+    
     // 箭头统一更新 填充与边框
     if (
       'thinTailArrow' == activeObject.type ||
@@ -118,6 +130,31 @@ const setTextColor = (value) => {
     canvasEditor.canvas.renderAll();
   }
 };
+
+
+// 文字元素
+const textType = ['i-text', 'textbox', 'text'];
+
+// 判断是否文本
+const isTextType = (activeObject) => {
+  return activeObject && textType.includes(activeObject.type);
+}
+
+// 改变文本颜色
+const changeTextColor = (activeObject, color)=>{
+  // 文本类型单独处理
+  if ( activeObject.isEditing) {
+    activeObject.setSelectionStyles({'fill': color});
+  } else {
+    activeObject.fill = color;
+    let s = activeObject.styles;
+    for (let i in s) {
+        for (let j in s[i]) {
+            s[i][j].fill = color;
+        }
+    }
+  }
+}
 
 const dropColor = (value) => {
   colorChange(value);

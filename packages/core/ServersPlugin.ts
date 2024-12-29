@@ -269,6 +269,8 @@ class ServersPlugin implements IPluginTempl {
       const option = this._getSaveOption();
       this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
       imgUrl = this.canvas.toDataURL(option);
+      this.editor.hooksEntity.hookSaveAfter.callAsync(imgUrl, () => {
+      });
       // const { fontOption, svgOption } = this._getSaveSvgOption();
       // fabric.fontPaths = {
       //   ...fontOption,
@@ -370,6 +372,7 @@ class ServersPlugin implements IPluginTempl {
     const option = {
       name: 'New Image',
       format: 'png',
+      multiplier: 2,  // 像素翻倍，牛的一批
       quality: 1,
       width,
       height,
