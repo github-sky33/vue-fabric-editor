@@ -191,16 +191,16 @@ const getObjectAttr = (e) => {
 const changeCommon = (key, value) => {
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
   if (activeObject) {
-    if ("textBackgroundColor"==key) {
+    if ('textBackgroundColor' == key) {
       if (activeObject.isEditing) {
-        activeObject.setSelectionStyles({'textBackgroundColor': value});
+        activeObject.setSelectionStyles({ textBackgroundColor: value });
       } else {
-        activeObject.textBackgroundColor = value;
+        activeObject.set('textBackgroundColor', value);
         let s = activeObject.styles;
         for (let i in s) {
-            for (let j in s[i]) {
-                s[i][j].textBackgroundColor = value;
-            }
+          for (let j in s[i]) {
+            s[i][j].textBackgroundColor = value;
+          }
         }
       }
     } else {
@@ -224,28 +224,27 @@ const changeFontWeight = (key, value) => {
   baseAttr.fontWeight = nValue;
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
   // activeObject && activeObject.set(key, nValue);
-  debugger
   doFontChange(activeObject, key, nValue);
   canvasEditor.canvas.renderAll();
 };
 
 // 执行改变
-const doFontChange=(activeObject, key, value) =>{
+const doFontChange = (activeObject, key, value) => {
   if (activeObject) {
-    if (activeObject.isEditing && activeObject.getSelectionStyles().length>0) {
+    if (activeObject.isEditing && activeObject.getSelectionStyles().length > 0) {
       // 编辑状态
-      activeObject.setSelectionStyles({[key]: value});
+      activeObject.setSelectionStyles({ [key]: value });
     } else {
       activeObject && activeObject.set(key, value);
       let s = activeObject.styles;
       for (let i in s) {
         for (let j in s[i]) {
-            s[i][j][key] = value;
+          s[i][j][key] = value;
         }
       }
     }
   }
-}
+};
 
 // 斜体
 const changeFontStyle = (key, value) => {

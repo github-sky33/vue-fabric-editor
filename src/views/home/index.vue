@@ -357,6 +357,8 @@ onMounted(() => {
     controlsAboveOverlay: true, // 超出clipPath后仍然展示控制条
     // imageSmoothingEnabled: false, // 解决文字导出后不清晰问题
     preserveObjectStacking: true, // 当选择画布中的对象时，让对象不在顶层。
+    selectionKey: 'ctrlKey', // 多选快捷键
+    selectionFullyContained: true, // 是否只选中完全包含在选框内的对象
   });
 
   // 初始化编辑器

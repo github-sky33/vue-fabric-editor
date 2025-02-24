@@ -25,6 +25,7 @@ class DrawLinePlugin implements IPluginTempl {
   isDrawingLineMode: boolean;
   lineType: string;
   lineToDraw: any;
+  isAddedToCanvas: boolean;
   pointer: any;
   pointerPoints: any;
   isDrawingLine: boolean;
@@ -33,6 +34,7 @@ class DrawLinePlugin implements IPluginTempl {
     this.isDrawingLineMode = false;
     this.lineType = '';
     this.lineToDraw = null;
+    this.isAddedToCanvas = false;
     this.pointer = null;
     this.pointerPoints = null;
     this.init();
@@ -95,12 +97,15 @@ class DrawLinePlugin implements IPluginTempl {
       this.lineToDraw.selectable = false;
       this.lineToDraw.evented = false;
       this.lineToDraw.strokeUniform = true;
-      canvas.add(this.lineToDraw);
     });
 
     canvas.on('mouse:move', (o) => {
       if (!this.isDrawingLine || !['line', 'arrow', 'thinTailArrow'].includes(this.lineType))
         return;
+      if (!this.isAddedToCanvas) {
+        this.isAddedToCanvas = true;
+        canvas.add(this.lineToDraw);
+      }
       canvas.discardActiveObject();
       const activeObject = canvas.getActiveObject();
       if (activeObject) return;
@@ -138,6 +143,7 @@ class DrawLinePlugin implements IPluginTempl {
       this.lineToDraw.setCoords();
       this.isDrawingLine = false;
       canvas.discardActiveObject();
+      this.isAddedToCanvas = false;
     });
   }
 

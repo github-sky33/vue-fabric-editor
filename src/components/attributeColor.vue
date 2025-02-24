@@ -56,6 +56,7 @@ const angleKey = 'gradientAngle';
 // 属性值
 const baseAttr = reactive({
   fill: '#ffffffff',
+  isTextSelect: false,
 });
 
 const colorList = ref([
@@ -75,6 +76,7 @@ const getObjectAttr = (e) => {
     const fill = activeObject.get('fill');
     if (typeof fill === 'string') {
       baseAttr.fill = fill;
+      baseAttr.isTextSelect = true;
     } else {
       baseAttr.fill = fabricGradientToCss(fill, activeObject);
     }
@@ -87,13 +89,16 @@ const colorChange = (value) => {
     const color = String(value.color).replace('NaN', '');
     if (value.mode === '纯色') {
       if (isTextType) {
-        changeTextColor(activeObject, color);
+        if (!baseAttr.isTextSelect) {
+          changeTextColor(activeObject, color);
+        }
+        baseAttr.isTextSelect = false;
       } else {
         activeObject.set('fill', color);
       }
     } else if (value.mode === '渐变') {
       if (isTextType) {
-        return ;
+        return;
       }
       const currentGradient = cssToFabricGradient(
         toRaw(value.stops),
@@ -117,7 +122,7 @@ const setTextColor = (value) => {
     } else {
       activeObject.set('fill', color);
     }
-    
+
     // 箭头统一更新 填充与边框
     if (
       'thinTailArrow' == activeObject.type ||
@@ -131,30 +136,30 @@ const setTextColor = (value) => {
   }
 };
 
-
 // 文字元素
 const textType = ['i-text', 'textbox', 'text'];
 
 // 判断是否文本
 const isTextType = (activeObject) => {
   return activeObject && textType.includes(activeObject.type);
-}
+};
 
 // 改变文本颜色
-const changeTextColor = (activeObject, color)=>{
+const changeTextColor = (activeObject, color) => {
   // 文本类型单独处理
-  if ( activeObject.isEditing) {
-    activeObject.setSelectionStyles({'fill': color});
+  baseAttr.isTextSelect = false;
+  if (activeObject.isEditing) {
+    activeObject.setSelectionStyles({ fill: color });
   } else {
-    activeObject.fill = color;
+    activeObject.set('fill', color);
     let s = activeObject.styles;
     for (let i in s) {
-        for (let j in s[i]) {
-            s[i][j].fill = color;
-        }
+      for (let j in s[i]) {
+        s[i][j].fill = color;
+      }
     }
   }
-}
+};
 
 const dropColor = (value) => {
   colorChange(value);
