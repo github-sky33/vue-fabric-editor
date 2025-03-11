@@ -111,6 +111,17 @@
         </Col>
       </Row>
 
+      <!-- 预选颜色 -->
+      <div class="color-list">
+        <span class="pre-box">预选颜色：</span>
+        <template v-for="(item, i) in colorList" :key="item.color + i">
+          <span
+            :style="`background:${item.color}`"
+            @click="setBgColor('textBackgroundColor', item.color)"
+            :title="item.name"
+          ></span>
+        </template>
+      </div>
       <div class="flex-view">
         <div class="flex-item">
           <span class="label">{{ $t('background') }}</span>
@@ -152,6 +163,15 @@ const baseAttr = reactive({
   linethrough: false,
   overline: false,
 });
+
+const colorList = ref([
+  { color: '#FFFFFF', name: '白' },
+  { color: '#FF0000', name: '红' },
+  { color: '#FF1493', name: '品红' },
+  { color: '#000000', name: '黑' },
+  { color: '#ffffff00', name: '透明' },
+  { color: '#ffff00', name: '黄色' },
+]);
 
 const fontsList = ref([]);
 canvasEditor.getFontList().then((list) => {
@@ -206,6 +226,16 @@ const changeCommon = (key, value) => {
     } else {
       activeObject && activeObject.set(key, value);
     }
+    canvasEditor.canvas.renderAll();
+  }
+};
+
+// 设置文本、文本框的文字背景预选颜色
+const setBgColor = (key, value) => {
+  const activeObject = canvasEditor.canvas.getActiveObjects()[0];
+  if (activeObject) {
+    activeObject.set(key, value);
+    baseAttr.textBackgroundColor = value;
     canvasEditor.canvas.renderAll();
   }
 };
@@ -415,6 +445,23 @@ onBeforeUnmount(() => {
     &.ivu-radio-group-large .ivu-radio-wrapper {
       font-size: 24px;
     }
+  }
+}
+.color-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 5px;
+  span {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .pre-box {
+    width: 80px;
+    border: none;
   }
 }
 </style>

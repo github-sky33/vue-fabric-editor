@@ -221,7 +221,7 @@ onBeforeUnmount(() => {
 
 <style scoped lang="less">
 .color-bar {
-  // width: 30px;
+  /* width: 30px; */
   height: 30px;
   cursor: pointer;
   border: 2px solid #f6f7f9;

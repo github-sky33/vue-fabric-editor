@@ -7,7 +7,10 @@
 -->
 
 <template>
-  <div class="box attr-item-box" v-if="mixinState.mSelectMode === 'one'">
+  <div
+    class="box attr-item-box"
+    v-if="mixinState.mSelectMode === 'one' && !textType.includes(mixinState.mSelectOneType)"
+  >
     <!-- <h3>阴影</h3> -->
     <Divider plain orientation="left"><h4>阴影</h4></Divider>
     <!-- 通用属性 -->
@@ -62,6 +65,9 @@ import InputNumber from '@/components/inputNumber';
 
 const update = getCurrentInstance();
 const { fabric, mixinState, canvasEditor } = useSelect();
+
+// 文字元素
+const textType = ['i-text', 'textbox', 'text', 'image'];
 
 // 属性值
 const baseAttr = reactive({

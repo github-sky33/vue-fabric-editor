@@ -146,7 +146,7 @@
               <!-- 字体属性 -->
               <attributeFont></attributeFont>
               <!-- 字体小数点 -->
-              <attributeTextFloat></attributeTextFloat>
+              <!-- <attributeTextFloat></attributeTextFloat> -->
               <!-- 文字内容  -->
               <attribute-text-content></attribute-text-content>
               <!-- 位置信息 -->

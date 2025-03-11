@@ -304,7 +304,7 @@ const addText = (event) => {
   const text = new fabric.IText(t('everything_is_fine'), {
     ...defaultPosition,
     fontSize: 25,
-    fill: '#FF0000FF',
+    fill: '#FF1493',
     fontFamily: '宋体',
   });
 
@@ -318,7 +318,7 @@ const addTextBox = (event) => {
     splitByGrapheme: true,
     width: 400,
     fontSize: 25,
-    fill: '#FF0000FF',
+    fill: '#FF1493',
     fontFamily: '宋体',
   });
 
@@ -487,6 +487,12 @@ const cancelDraw = () => {
 
 onDeactivated(() => {
   cancelDraw();
+});
+
+canvasEditor.canvas.on('mouse:up', () => {
+  if (state.isDrawingLineMode && state.lineType !== LINE_TYPE.polygon) {
+    cancelDraw();
+  }
 });
 </script>
 

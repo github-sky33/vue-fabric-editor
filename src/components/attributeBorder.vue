@@ -6,7 +6,12 @@
  * @Description: 边框
 -->
 <template>
-  <div class="box attr-item-box" v-if="mixinState.mSelectMode === 'one' && !isGroup">
+  <div
+    class="box attr-item-box"
+    v-if="
+      mixinState.mSelectMode === 'one' && !isGroup && !textType.includes(mixinState.mSelectOneType)
+    "
+  >
     <!-- <h3>边框</h3> -->
     <Divider plain orientation="left"><h4>边框</h4></Divider>
     <!-- 预选颜色 -->
@@ -82,6 +87,9 @@ const baseAttr = reactive({
   strokeWidth: 0,
   strokeDashArray: [],
 });
+
+// 文字元素
+const textType = ['i-text', 'textbox', 'text', 'image'];
 
 const colorList = ref([
   { color: '#FFFFFF', name: '白' },

@@ -213,6 +213,7 @@ class CopyPlugin implements IPluginTempl {
               left: 100,
               top: 100,
               fontSize: 80,
+              fill: '#FF1493',
               id: uuid(),
             });
             canvas.add(fabricText);

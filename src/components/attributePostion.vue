@@ -35,7 +35,10 @@
             @on-input="(value) => changeCommon('angle', value)"
           ></Slider>
         </FormItem>
-        <FormItem :label="$t('attributes.opacity')">
+        <FormItem
+          :label="$t('attributes.opacity')"
+          v-if="!textType.includes(mixinState.mSelectOneType)"
+        >
           <Slider
             v-model="baseAttr.opacity"
             @on-input="(value) => changeCommon('opacity', value)"
@@ -53,6 +56,9 @@ import InputNumber from '@/components/inputNumber';
 
 const update = getCurrentInstance();
 const { mixinState, canvasEditor } = useSelect();
+
+// 文字元素
+const textType = ['i-text', 'textbox', 'text', 'image'];
 
 // 可修改的元素
 const baseType = [
