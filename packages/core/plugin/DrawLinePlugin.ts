@@ -9,6 +9,7 @@
 import { v4 as uuid } from 'uuid';
 import { fabric } from 'fabric';
 import Arrow from '../objects/Arrow';
+import DoubleArrow from '../objects/DoubleArrow';
 import ThinTailArrow from '../objects/ThinTailArrow';
 import type { IEditor, IPluginTempl } from '@kuaitu/core';
 
@@ -78,6 +79,9 @@ class DrawLinePlugin implements IPluginTempl {
             id: uuid(),
           };
           break;
+        case 'doubleArrow':
+          NodeHandler = DoubleArrow;
+          break;
         case 'thinTailArrow':
           NodeHandler = ThinTailArrow;
           opts = {
@@ -100,7 +104,10 @@ class DrawLinePlugin implements IPluginTempl {
     });
 
     canvas.on('mouse:move', (o) => {
-      if (!this.isDrawingLine || !['line', 'arrow', 'thinTailArrow'].includes(this.lineType))
+      if (
+        !this.isDrawingLine ||
+        !['line', 'arrow', 'doubleArrow', 'thinTailArrow'].includes(this.lineType)
+      )
         return;
       if (!this.isAddedToCanvas) {
         this.isAddedToCanvas = true;

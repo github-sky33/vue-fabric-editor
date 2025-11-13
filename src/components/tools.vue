@@ -159,6 +159,12 @@
         </svg>
       </span>
       <span
+        @click="drawingLineModeSwitch('doubleArrow')"
+        :class="state.isDrawingLineMode && state.lineType === 'doubleArrow' && 'bg'"
+      >
+        ↔
+      </span>
+      <span
         @click="drawingLineModeSwitch('thinTailArrow')"
         :class="state.isDrawingLineMode && state.lineType === 'thinTailArrow' && 'bg'"
         title="粗箭头"
