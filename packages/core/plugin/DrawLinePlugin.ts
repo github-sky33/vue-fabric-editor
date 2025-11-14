@@ -81,6 +81,12 @@ class DrawLinePlugin implements IPluginTempl {
           break;
         case 'doubleArrow':
           NodeHandler = DoubleArrow;
+          opts = {
+            strokeWidth: 2,
+            stroke: '#ff0000',
+            fill: '#ff0000',
+            id: uuid(),
+          };
           break;
         case 'thinTailArrow':
           NodeHandler = ThinTailArrow;
