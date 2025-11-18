@@ -319,7 +319,23 @@ const addText = (event) => {
 
 const addTextBox = (event) => {
   cancelDraw();
-  const text = new fabric.Textbox(t('everything_goes_well'), {
+  // console.log('点击了文本框选项');
+  // const text = new fabric.Textbox(t('everything_goes_well'), {
+  //   ...defaultPosition,
+  //   splitByGrapheme: true,
+  //   width: 400,
+  //   fontSize: 25,
+  //   fill: '#FF1493',
+  //   fontFamily: '宋体',
+  //   hasBorders: true, // 显示边框
+  //   borderColor: 'green', // 边框颜色
+  //   cornerColor: 'green', // 控制点颜色
+  //   blur() {
+  //     console.log('文本框失去了焦点');
+  //   },
+  // });
+  // 使用示例
+  const textbox = new fabric.BorderedTextbox(t('everything_goes_well'), {
     ...defaultPosition,
     splitByGrapheme: true,
     width: 400,
@@ -327,8 +343,7 @@ const addTextBox = (event) => {
     fill: '#FF1493',
     fontFamily: '宋体',
   });
-
-  canvasEditor.addBaseType(text, { center: true, event });
+  canvasEditor.addBaseType(textbox, { center: true, event });
 };
 
 const addTriangle = (event) => {

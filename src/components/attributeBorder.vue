@@ -21,7 +21,7 @@
         <span
           class="box-color"
           :style="`background:${item.color}`"
-          @click="setBorderLineColor('stroke', item.color)"
+          @click="setBorderLineColor(item.color)"
           :title="item.name"
         ></span>
       </template>
@@ -34,8 +34,15 @@
             <span class="label">{{ $t('color') }}</span>
             <div class="content">
               <ColorPicker
+                v-if="baseAttr.type !== 'borderedTextbox'"
                 v-model="baseAttr.stroke"
                 @on-change="(value) => changeCommon('stroke', value)"
+                alpha
+              />
+              <ColorPicker
+                v-else
+                v-model="baseAttr.borderColor"
+                @on-change="(value) => changeCommon('borderColor', value)"
                 alpha
               />
             </div>
@@ -43,11 +50,19 @@
         </Col>
         <Col flex="1">
           <InputNumber
+            v-if="baseAttr.type !== 'borderedTextbox'"
             v-model="baseAttr.strokeWidth"
             @on-change="(value) => changeCommon('strokeWidth', value)"
             :append="$t('width')"
             :min="0"
-          ></InputNumber>
+          />
+          <InputNumber
+            v-else
+            v-model="baseAttr.borderWidth"
+            @on-change="(value) => changeCommon('borderWidth', value)"
+            :append="$t('width')"
+            :min="0"
+          />
         </Col>
       </Row>
 
@@ -83,9 +98,13 @@ const { mixinState, canvasEditor } = useSelect();
 const groupType = ['group'];
 // 属性值
 const baseAttr = reactive({
+  type: '',
   stroke: '#fff',
   strokeWidth: 0,
   strokeDashArray: [],
+  borderColor: '#007bff',
+  borderWidth: 1,
+  borderDash: [],
 });
 
 // 文字元素
@@ -182,6 +201,12 @@ const getObjectAttr = (e) => {
   // 不是当前obj，跳过
   if (e && e.target && e.target !== activeObject) return;
   if (activeObject && !groupType.includes(activeObject.type)) {
+    baseAttr.type = activeObject?.type ?? '';
+    if (activeObject?.type === 'borderedTextbox') {
+      // 自定义的文本框
+      baseAttr.borderColor = activeObject.get('borderColor');
+      baseAttr.borderWidth = activeObject.get('borderWidth');
+    }
     // baseAttr.stroke = activeObject.get('stroke');
     baseAttr.strokeWidth = activeObject.get('strokeWidth');
     const strokeDashArray = JSON.stringify(activeObject.get('strokeDashArray') || []);
@@ -202,16 +227,22 @@ const changeCommon = (key, value) => {
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
   if (activeObject) {
     activeObject.set(key, value);
-    activeObject.set('strokeUniform', true);
+    activeObject.set('dirty', true); // 标记为脏，强制重新渲染
+    // activeObject.set('strokeUniform', true);
     canvasEditor.canvas.renderAll();
   }
 };
 
 // 设置边框Line的颜色
-const setBorderLineColor = (key, value) => {
+const setBorderLineColor = (value) => {
   const activeObject = canvasEditor.canvas.getActiveObjects()[0];
   if (activeObject) {
-    activeObject.set(key, value);
+    if (activeObject.type === 'borderedTextbox') {
+      activeObject.set('borderColor', value);
+    } else {
+      activeObject.set('stroke', value);
+    }
+    activeObject.set('dirty', true); // 标记为脏，强制重新渲染
     canvasEditor.canvas.renderAll();
   }
 };
