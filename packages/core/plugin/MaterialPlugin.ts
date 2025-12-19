@@ -153,10 +153,17 @@ class MaterialPlugin implements IPluginTempl {
   getSizeList() {
     return Promise.resolve([
       {
-        value: 'plmdefaultsize',
-        name: '工艺编辑器默认尺寸',
+        value: 'plma3size',
+        name: '工艺编辑器-A3尺寸',
         width: 900,
         height: 1020,
+        unit: 'px',
+      },
+      {
+        value: 'plma4size',
+        name: '工艺编辑器-A4尺寸',
+        width: 595, // 更接近真实 A4 比例的宽度
+        height: 842, // 更接近真实 A4 比例的高度
         unit: 'px',
       },
     ]);

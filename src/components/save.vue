@@ -154,11 +154,11 @@ const handleSaveToProcess = () => {
       const oid =
         route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333';
       if (imgDescriptor && jsonDescriptor) {
-        let params = {
+        const params = {
           objectId: oid,
           cacheDescriptor: imgDescriptor,
           jsonCacheDescriptor: jsonDescriptor,
-          // filename: "illstration_image_1.svg"
+          filename: 'illstration_image_1.svg',
         };
         axios.post(cacheDesUrl, params).then((res) => {
           const data = res.data;
