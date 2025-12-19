@@ -13,7 +13,7 @@
     </h3>
     <Form ref="formInline" inline :label-width="40">
       <FormItem label="宽度">
-        <InputNumber v-model="width" :min="1" placeholder="请输入"></InputNumber>
+        <InputNumber v-model="width" :min="1" placeholder="请输入" readonly></InputNumber>
       </FormItem>
       <FormItem label="高度">
         <InputNumber v-model="height" :min="1" placeholder="请输入"></InputNumber>

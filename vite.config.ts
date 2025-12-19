@@ -98,8 +98,10 @@ const config = ({ mode }) => {
       },
     },
     server: {
-      port: 3000,
+      port: 8888,
       open: true,
+      host: '0.0.0.0', // 强制使用 IPv4
+      strictPort: false, // 端口被占用时自动切换
       proxy: {
         '/Windchill': {
           target: 'http://10.6.14.210/',
