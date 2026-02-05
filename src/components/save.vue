@@ -51,6 +51,12 @@ import { useRoute } from 'vue-router';
 import { Message } from 'view-ui-plus';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
+import { usePictureEditorReceiver } from '@/hooks/usePictureEditorReceiver';
+const pageSize = inject('pageSize', 'A3');
+const pageSizeDesc = computed(() => {
+  return pageSize.value ? `_${pageSize.value}` : '';
+});
+const { imageDataUrl, notifySaveSuccess } = usePictureEditorReceiver();
 const route = useRoute();
 
 const { createTmplByCommon, updataTemplInfo, routerToId } = useMaterial();
@@ -113,12 +119,14 @@ const clear = () => {
   canvasEditor.historyUpdate();
 };
 
-const disabled = ref(true);
+const disabled = ref(false);
 
 // 图片和JSON文件都保存到结构化工艺后端
 const handleSaveToProcess = () => {
+  const oid = route?.query?.oid || '';
   let result = canvasEditor.saveImgAndJson();
   result.then(async (resObj) => {
+    console.log('imageDataUrl:', imageDataUrl);
     const cacheDesResult = await getCacheDescriptorServlet();
     const urlUpload = '/Windchill/' + cacheDesResult['uploadUrl'].split('/Windchill/')[1];
     const masterUrl = cacheDesResult['masterUrl'];
@@ -127,8 +135,8 @@ const handleSaveToProcess = () => {
     let filePrames2 = new FormData();
 
     // 图标文件类型转换
-    // const blob1 = new Blob([resObj.svgData], { type:"image/svg+xml"}); // 创建Blob对象
-    // const file1 = new window.File([blob1],'illstration_image_1.svg',{type:'image/svg+xml'}); //转成文件
+
+    console.log('resObj.imgUrl:', resObj.imgUrl);
     const file1 = base64ToBlob(resObj.imgUrl);
     filePrames1.append('Master_URL', masterUrl);
     filePrames1.append('CacheDescriptor_array', cacheStrs[0]);
@@ -142,6 +150,11 @@ const handleSaveToProcess = () => {
     filePrames2.append('CacheDescriptor_array', cacheStrs[1]);
     filePrames2.append('primaryFilepathInput', file2);
 
+    // 上传前先删除原有图片文件
+    if (imageDataUrl?.graphObjectId) {
+      await deleteApplicationData(oid, imageDataUrl?.graphObjectId);
+    }
+
     // 做第二次请求，上传图片文件内容
     const result1 = axios.post(urlUpload, filePrames1);
     const result2 = axios.post(urlUpload, filePrames2);
@@ -150,19 +163,19 @@ const handleSaveToProcess = () => {
       // 截取后端返回的文件序列号，填入到对应的传参中
       const imgDescriptor = response[0].data.match(matchReg)[2];
       const jsonDescriptor = response[1].data.match(matchReg)[2];
-      const cacheDesUrl = '/Windchill/servlet/rest/StructuredProcessPlan/v1/UploadIllustration';
-      const oid =
-        route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333';
+      const cacheDesUrl = '/Windchill/servlet/rest/StructuredProcessPlan/v2/UploadIllustration';
+
       if (imgDescriptor && jsonDescriptor) {
         const params = {
           objectId: oid,
           cacheDescriptor: imgDescriptor,
           jsonCacheDescriptor: jsonDescriptor,
-          filename: 'illstration_image_1.svg',
+          filename: `illustration_image_1${pageSizeDesc.value}.png`,
         };
         axios.post(cacheDesUrl, params).then((res) => {
           const data = res.data;
           if (data.resultCode === '200') {
+            notifySaveSuccess(); // 通知工艺编辑器保存成功
             Message.success('文件保存成功！');
           } else {
             Modal.error({
@@ -181,7 +194,7 @@ const handleSaveToProcess = () => {
 
 // 获取附件上传地址
 const getCacheDescriptorServlet = () => {
-  let oid = route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333';
+  let oid = route?.query?.oid;
   oid = oid.replace('OR:', '');
   return new Promise((resolve, reject) => {
     axios
@@ -210,24 +223,15 @@ const base64ToBlob = (base64Data) => {
   return [new Blob([arrayBuffer], { type: imageType }), imageType.slice(6)];
 };
 
-const getFileInfoShow = () => {
-  let oid = route?.query?.oid || 'OR:com.ptc.windchill.mpml.processplan.MPMProcessPlan:5372333';
-  axios
-    .get(`/Windchill/servlet/rest/StructuredProcessPlan/v1/GetIllustrationInfo/${oid}`)
-    .then((res) => {
-      const data = res.data;
-      if (data.resultCode === '200') {
-        if (data.data) {
-          disabled.value = data.data.workingCopy ? false : true;
-        } else {
-          disabled.value = false;
-        }
-      }
-    });
-};
+// 删除图片,附件
+function deleteApplicationData(contentHolderOid, applicationDataOid) {
+  return axios.delete(
+    `/Windchill/servlet/rest/StructuredProcessPlan/v2/DeleteApplicationData/${contentHolderOid}/${applicationDataOid}`
+  );
+}
 
 onMounted(() => {
-  getFileInfoShow();
+  // getFileInfoShow();
 });
 
 const beforeClear = () => {

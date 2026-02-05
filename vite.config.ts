@@ -22,7 +22,7 @@ const config = ({ mode }) => {
   const envPrefix = 'APP_';
   const { APP_TITLE = '', APP_BASE_PATH } = loadEnv(mode, process.cwd(), envPrefix);
   return {
-    base: isProd ? APP_BASE_PATH : '/',
+    base: isProd ? './' : '/',
     plugins: [
       vue(),
       autoImports({
@@ -51,6 +51,7 @@ const config = ({ mode }) => {
       svgLoader(),
     ],
     build: {
+      sourcemap: false,
       target: 'es2015',
       outDir: resolve(__dirname, 'dist'),
       assetsDir: 'assets',

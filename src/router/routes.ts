@@ -21,6 +21,10 @@ const routes: RouteRecordRaw[] = [
           window.location.href = '/';
         }
       }
+      // 存储业务类型
+      if (to.query.businessType) {
+        localStorage.setItem('businessType', (to.query.businessType ?? 'work') as string);
+      }
       return true;
     },
     component: () => import('@/views/home/index.vue'),
