@@ -143,7 +143,7 @@ class ServersPlugin implements IPluginTempl {
     // 确保元素存在id
     const temp = typeof jsonFile === 'string' ? JSON.parse(jsonFile) : jsonFile;
     const textPaths: Record<'id' | 'path', any>[] = [];
-    temp.objects.forEach((item: any) => {
+    temp.objects?.forEach((item: any) => {
       !item.id && (item.id = uuid());
       // 收集所有路径文本元素i-text，并设置path为null
       if (item.type === 'i-text' && item.path) {
@@ -269,8 +269,7 @@ class ServersPlugin implements IPluginTempl {
       const option = this._getSaveOption();
       this.canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
       imgUrl = this.canvas.toDataURL(option);
-      this.editor.hooksEntity.hookSaveAfter.callAsync(imgUrl, () => {
-      });
+      this.editor.hooksEntity.hookSaveAfter.callAsync(imgUrl, () => {});
       // const { fontOption, svgOption } = this._getSaveSvgOption();
       // fabric.fontPaths = {
       //   ...fontOption,
@@ -372,7 +371,7 @@ class ServersPlugin implements IPluginTempl {
     const option = {
       name: 'New Image',
       format: 'png',
-      multiplier: 2,  // 像素翻倍，牛的一批
+      multiplier: 2, // 像素翻倍，牛的一批
       quality: 1,
       width,
       height,

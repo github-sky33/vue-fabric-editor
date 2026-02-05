@@ -276,7 +276,7 @@ import Editor, {
   BarCodePlugin,
   QrCodePlugin,
   ImageStroke,
-  ResizePlugin,
+  // ResizePlugin,
   LockPlugin,
   AddBaseTypePlugin,
   MaskPlugin,
@@ -287,7 +287,7 @@ import AttributeTextContent from '@/components/attributeTextContent.vue';
 
 // 创建编辑器
 const canvasEditor = new Editor() as IEditor;
-
+const pageSize = ref('A3');
 const state = reactive({
   menuActive: 1,
   show: false,
@@ -396,7 +396,7 @@ onMounted(() => {
   canvasEditor.use(WaterMarkPlugin);
   canvasEditor.use(PsdPlugin);
   canvasEditor.use(ImageStroke);
-  canvasEditor.use(ResizePlugin);
+  // canvasEditor.use(ResizePlugin);
   canvasEditor.use(LockPlugin);
   canvasEditor.use(AddBaseTypePlugin);
   canvasEditor.use(MaskPlugin);
@@ -444,6 +444,7 @@ const { mixinState } = useSelectListen(canvasEditor);
 provide('fabric', fabric);
 provide('canvasEditor', canvasEditor);
 provide('mixinState', mixinState);
+provide('pageSize', pageSize);
 </script>
 <style lang="less" scoped>
 // 左侧容器
