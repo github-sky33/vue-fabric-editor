@@ -42,8 +42,8 @@ import useSelect from '@/hooks/select';
 
 const pageSize = inject('pageSize', 'A3');
 const sizeMap = {
-  A3: { width: 3600, height: 1020 },
-  A4: { width: 1800, height: 1020 },
+  A3: { width: 2040, height: 1800 },
+  A4: { width: 1020, height: 1800 },
 };
 const setSize = (val) => {
   if (val && sizeMap[val]) {
